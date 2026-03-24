@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevCrew — Freelance Tech Team</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F5F0E8;--cream2:#EDE7D9;--ink:#1A1A18;--ink2:#2E2E2B;
+  --green:#1D5C3A;--green-mid:#2E7D52;--green-accent:#3DA06B;--green-glow:rgba(29,92,58,0.15);
+  --gold:#C9973A;--gold2:#E8B84B;
+  --muted:#7A7A72;--muted2:#9A9A90;
+  --card:#FDFAF4;--card2:#F7F3EB;
+  --border:rgba(26,26,24,0.1);--border2:rgba(26,26,24,0.06);
+  --shadow:0 2px 20px rgba(26,26,24,0.06);
+  --shadow-lg:0 8px 48px rgba(26,26,24,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:0.025;pointer-events:none;z-index:1000;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 56px;
+  background:rgba(245,240,232,0.88);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  transition:padding 0.3s;
+}
+nav.scrolled{padding:14px 56px;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-mark{
+  width:34px;height:34px;background:var(--green);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:16px;font-weight:900;color:#fff;
+}
+.nav-logo-text{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-0.3px;}
+.nav-links{display:flex;align-items:center;gap:36px;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:400;transition:color 0.2s;letter-spacing:0.2px;}
+.nav-links a:hover{color:var(--ink);}
+.nav-cta{
+  background:var(--ink) !important;color:var(--cream) !important;
+  padding:9px 22px;border-radius:6px;font-size:13px !important;font-weight:500 !important;
+  transition:background 0.2s,transform 0.2s !important;
+}
+.nav-cta:hover{background:var(--green) !important;transform:translateY(-1px) !important;}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;display:grid;grid-template-columns:1fr 1fr;
+  align-items:center;gap:0;padding-top:80px;overflow:hidden;
+}
+.hero-left{
+  padding:80px 56px 80px 72px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--green-mid);margin-bottom:28px;
+}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--green-accent);}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(52px,5.5vw,80px);
+  font-weight:900;line-height:1.0;
+  letter-spacing:-2px;
+  color:var(--ink);
+  margin-bottom:28px;
+}
+.hero h1 em{color:var(--green);font-style:italic;}
+.hero-desc{
+  font-size:17px;color:var(--muted);line-height:1.75;
+  max-width:440px;font-weight:300;margin-bottom:44px;
+}
+.hero-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.btn-fill{
+  background:var(--ink);color:var(--cream);
+  padding:14px 30px;border-radius:6px;font-size:15px;font-weight:500;
+  text-decoration:none;transition:all 0.25s;border:2px solid var(--ink);
+}
+.btn-fill:hover{background:var(--green);border-color:var(--green);transform:translateY(-2px);}
+.btn-outline{
+  background:transparent;color:var(--ink);
+  padding:14px 30px;border-radius:6px;font-size:15px;font-weight:400;
+  text-decoration:none;transition:all 0.25s;border:2px solid var(--border);
+}
+.btn-outline:hover{border-color:var(--ink);transform:translateY(-2px);}
+.hero-right{
+  height:100vh;background:var(--green);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  align-items:flex-start;padding:56px;
+  position:relative;overflow:hidden;
+}
+.hero-right::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%,rgba(255,255,255,0.04) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 80%,rgba(61,160,107,0.3) 0%,transparent 50%);
+}
+.hero-right-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+.hero-right-content{position:relative;z-index:1;width:100%;}
+.hero-stat-row{display:flex;gap:48px;margin-bottom:48px;}
+.hero-stat-num{
+  font-family:'Playfair Display',serif;font-size:52px;font-weight:900;
+  color:#fff;line-height:1;letter-spacing:-2px;
+}
+.hero-stat-label{font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;font-weight:300;}
+.hero-bottom-label{
+  font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(255,255,255,0.35);font-weight:400;border-top:1px solid rgba(255,255,255,0.1);
+  padding-top:24px;width:100%;
+}
+.hero-scroll-hint{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--muted2);margin-top:44px;letter-spacing:0.5px;
+}
+.hero-scroll-hint::before{content:'';display:block;width:32px;height:1px;background:var(--muted2);}
+
+/* Stagger animations */
+.hero-left > *{opacity:0;transform:translateY(20px);animation:fadeUp 0.7s ease both;}
+.hero-eyebrow{animation-delay:0s !important;}
+.hero h1{animation-delay:0.1s !important;}
+.hero-desc{animation-delay:0.2s !important;}
+.hero-actions{animation-delay:0.3s !important;}
+.hero-scroll-hint{animation-delay:0.4s !important;}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+
+/* ── TICKER ── */
+.ticker-wrap{
+  background:var(--ink);padding:14px 0;overflow:hidden;position:relative;
+}
+.ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;}
+.ticker-wrap::before{left:0;background:linear-gradient(to right,var(--ink),transparent);}
+.ticker-wrap::after{right:0;background:linear-gradient(to left,var(--ink),transparent);}
+.ticker{display:flex;animation:ticker 35s linear infinite;width:max-content;}
+.ticker-item{display:flex;align-items:center;gap:10px;padding:0 28px;font-size:12px;color:rgba(255,255,255,0.4);white-space:nowrap;letter-spacing:1px;text-transform:uppercase;font-weight:400;}
+.ticker-item::before{content:'●';color:var(--green-accent);font-size:7px;}
+@keyframes ticker{to{transform:translateX(-50%);}}
+
+/* ── SECTION SCAFFOLDING ── */
+section{padding:96px 0;}
+.container{max-width:1200px;margin:0 auto;padding:0 56px;}
+.section-eyebrow{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:2px;color:var(--green-mid);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--green-accent);}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(32px,3.5vw,52px);font-weight:900;letter-spacing:-1.5px;line-height:1.05;color:var(--ink);margin-bottom:16px;}
+.section-sub{font-size:17px;color:var(--muted);font-weight:300;line-height:1.7;max-width:500px;}
+
+/* ── ABOUT ── */
+.about-section{background:var(--cream2);}
+.about-layout{display:grid;grid-template-columns:5fr 4fr;gap:80px;align-items:start;margin-top:64px;}
+.about-text p{font-size:16px;color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:20px;max-width:520px;}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:40px;}
+.stat-box{
+  background:var(--card);border:1px solid var(--border2);border-radius:12px;
+  padding:24px;transition:all 0.3s;
+}
+.stat-box:hover{border-color:var(--green-accent);box-shadow:0 4px 20px var(--green-glow);}
+.stat-n{font-family:'Playfair Display',serif;font-size:38px;font-weight:900;color:var(--green);letter-spacing:-1px;line-height:1;}
+.stat-l{font-size:13px;color:var(--muted);margin-top:4px;font-weight:400;}
+.team-cards{display:flex;flex-direction:column;gap:10px;}
+.team-card{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card);border:1px solid var(--border2);border-radius:10px;
+  padding:16px 18px;transition:all 0.3s;
+}
+.team-card:hover{border-color:var(--green-accent);transform:translateX(4px);}
+.tc-icon{width:40px;height:40px;border-radius:8px;background:rgba(29,92,58,0.08);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.tc-role{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.tc-desc{font-size:12px;color:var(--muted);font-weight:300;}
+
+/* ── STACK ── */
+.stack-section{background:var(--cream);}
+.stack-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px;}
+.stack-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:14px;
+  padding:28px 22px;transition:all 0.3s;
+}
+.stack-card:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.stack-icon-big{font-size:32px;margin-bottom:14px;}
+.stack-name{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--ink);margin-bottom:8px;letter-spacing:-0.3px;}
+.stack-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;font-weight:300;}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;}
+.tag{font-size:11px;padding:3px 10px;border-radius:4px;background:rgba(29,92,58,0.07);color:var(--green);border:1px solid rgba(29,92,58,0.15);font-weight:500;}
+
+/* ── PROCESS ── */
+.process-section{background:var(--ink);}
+.process-section .section-eyebrow{color:var(--green-accent);}
+.process-section .section-eyebrow::before{background:var(--green-accent);}
+.process-section .section-title{color:var(--cream);}
+.process-section .section-sub{color:rgba(245,240,232,0.5);}
+.process-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;margin-top:64px;background:rgba(255,255,255,0.06);border-radius:14px;overflow:hidden;}
+.process-step{
+  background:rgba(255,255,255,0.02);padding:32px 20px;
+  display:flex;flex-direction:column;align-items:flex-start;gap:0;
+  transition:background 0.3s;cursor:default;
+}
+.process-step:hover{background:rgba(29,92,58,0.15);}
+.ps-num{
+  font-family:'Playfair Display',serif;font-size:42px;font-weight:900;
+  color:rgba(255,255,255,0.08);line-height:1;margin-bottom:20px;
+}
+.ps-title{font-size:14px;font-weight:600;color:var(--cream);margin-bottom:8px;letter-spacing:0.2px;}
+.ps-desc{font-size:12px;color:rgba(245,240,232,0.4);line-height:1.6;font-weight:300;}
+
+/* ── PROJECTS ── */
+.projects-section{background:var(--cream2);}
+.featured-wrap{margin-top:64px;}
+
+/* Featured card */
+.fp-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:20px;
+  overflow:hidden;display:grid;grid-template-columns:1fr 1fr;
+  box-shadow:var(--shadow-lg);transition:box-shadow 0.3s;
+}
+.fp-card:hover{box-shadow:0 16px 64px rgba(29,92,58,0.15);}
+.fp-visual{
+  background:linear-gradient(145deg,#1A3D28,#1D5C3A);
+  min-height:440px;display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;padding:40px;
+}
+.fp-visual::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 60% at 30% 30%,rgba(61,160,107,0.12) 0%,transparent 60%);
+}
+.fp-visual-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,0.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.035) 1px,transparent 1px);
+  background-size:36px 36px;
+}
+.phones-wrap{position:relative;z-index:1;display:flex;gap:14px;align-items:flex-end;}
+.ph{
+  background:rgba(10,22,14,0.82);border:1px solid rgba(255,255,255,0.12);
+  border-radius:20px;overflow:hidden;backdrop-filter:blur(8px);
+}
+.ph-sm{width:105px;aspect-ratio:9/19;display:flex;flex-direction:column;}
+.ph-lg{width:132px;aspect-ratio:9/19;display:flex;flex-direction:column;transform:translateY(-20px);}
+.ph-bar{background:rgba(29,92,58,0.55);padding:9px 10px;font-size:8px;font-weight:600;color:rgba(183,228,199,0.9);letter-spacing:0.5px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.ph-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#52B788;margin-right:3px;}
+.ph-body{flex:1;padding:9px;display:flex;flex-direction:column;gap:6px;}
+.ph-row{height:7px;background:rgba(255,255,255,0.07);border-radius:3px;}
+.ph-row.g{background:rgba(29,92,58,0.55);width:55%;}
+.ph-mini{background:rgba(255,255,255,0.04);border-radius:6px;padding:7px;border:1px solid rgba(255,255,255,0.05);}
+.ph-mini-row{height:5px;background:rgba(255,255,255,0.09);border-radius:2px;margin-bottom:4px;}
+.ph-mini-row:last-child{margin:0;width:65%;}
+
+.fp-content{padding:48px 40px;display:flex;flex-direction:column;justify-content:center;}
+.fp-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(29,92,58,0.07);border:1px solid rgba(29,92,58,0.2);
+  border-radius:4px;padding:4px 12px;font-size:11px;font-weight:500;
+  color:var(--green-mid);margin-bottom:22px;width:fit-content;letter-spacing:0.5px;text-transform:uppercase;
+}
+.fp-title{font-family:'Playfair Display',serif;font-size:34px;font-weight:900;letter-spacing:-1px;color:var(--ink);margin-bottom:6px;}
+.fp-prev{font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:300;}
+.fp-desc{font-size:15px;color:var(--muted);line-height:1.75;font-weight:300;margin-bottom:28px;}
+.fp-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:28px;}
+.fp-feat{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--ink2);}
+.fp-feat::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--green-accent);flex-shrink:0;}
+.fp-links{display:flex;gap:8px;flex-wrap:wrap;}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;border-radius:6px;font-size:13px;font-weight:500;
+  text-decoration:none;transition:all 0.2s;border:1.5px solid var(--border);color:var(--muted);
+}
+.pill:hover{border-color:var(--green);color:var(--green);background:rgba(29,92,58,0.04);}
+.pill.main{background:var(--green);border-color:var(--green);color:#fff;}
+.pill.main:hover{background:var(--green-mid);border-color:var(--green-mid);transform:translateY(-1px);}
+
+/* Projects grid */
+.proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:28px;}
+.proj-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:16px;
+  padding:28px;transition:all 0.3s;display:flex;flex-direction:column;
+}
+.proj-card:hover{border-color:var(--green);transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+.proj-icon{font-size:28px;margin-bottom:16px;}
+.proj-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;letter-spacing:-0.4px;color:var(--ink);margin-bottom:4px;}
+.proj-cat{font-size:12px;color:var(--green-mid);font-weight:500;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.8px;}
+.proj-note{display:inline-block;font-size:11px;background:rgba(201,151,58,0.1);color:var(--gold);border:1px solid rgba(201,151,58,0.25);padding:2px 8px;border-radius:3px;margin-bottom:10px;font-weight:500;}
+.proj-desc{font-size:13px;color:var(--muted);line-height:1.65;font-weight:300;margin-bottom:18px;flex:1;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:18px;}
+.proj-links{display:flex;gap:7px;flex-wrap:wrap;}
+.mini-pill{font-size:11px;padding:5px 11px;border-radius:4px;border:1px solid var(--border);color:var(--muted);text-decoration:none;transition:all 0.2s;font-weight:400;}
+.mini-pill:hover{border-color:var(--green);color:var(--green);}
+
+/* ── BIO ── */
+.bio-section{background:var(--cream);}
+.bio-layout{display:grid;grid-template-columns:360px 1fr;gap:72px;align-items:start;margin-top:64px;}
+.bio-card{
+  background:var(--card);border:1px solid var(--border2);border-radius:16px;
+  overflow:hidden;box-shadow:var(--shadow);
+}
+.bio-card-top{
+  background:var(--green);padding:32px;text-align:center;
+  position:relative;
+}
+.bio-initials{
+  width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.15);
+  border:2px solid rgba(255,255,255,0.25);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+  font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:#fff;
+}
+.bio-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;}
+.bio-title-badge{font-size:12px;color:rgba(255,255,255,0.65);font-weight:300;}
+.bio-card-body{padding:24px;}
+.bio-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border2);font-size:13px;}
+.bio-row:last-child{border:none;}
+.bio-key{color:var(--muted);font-weight:400;}
+.bio-val{color:var(--ink2);font-weight:500;text-align:right;}
+.bio-val.avail{color:var(--green-mid);}
+.bio-contact-row{display:flex;flex-direction:column;gap:8px;margin-top:18px;}
+.contact-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:10px 16px;border-radius:8px;font-size:13px;font-weight:500;
+  text-decoration:none;transition:all 0.2s;border:1.5px solid var(--border);color:var(--muted);
+}
+.contact-btn:hover{border-color:var(--green);color:var(--green);background:rgba(29,92,58,0.04);}
+.contact-btn.wa{background:rgba(37,211,102,0.06);border-color:rgba(37,211,102,0.3);color:#128C7E;}
+.contact-btn.wa:hover{background:rgba(37,211,102,0.12);border-color:#25D366;}
+
+.bio-right h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--ink);margin-bottom:12px;letter-spacing:-0.5px;}
+.bio-right p{font-size:15px;color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:32px;}
+.skills-list{display:flex;flex-direction:column;gap:14px;}
+.skill-item{display:flex;flex-direction:column;gap:6px;}
+.skill-top{display:flex;justify-content:space-between;font-size:13px;color:var(--ink2);}
+.skill-track{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.skill-fill{height:100%;background:linear-gradient(to right,var(--green),var(--green-accent));border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform 1.4s cubic-bezier(0.4,0,0.2,1);}
+.tools-cloud{display:flex;flex-wrap:wrap;gap:7px;margin-top:28px;}
+
+/* ── CTA ── */
+.cta-section{
+  background:var(--green);padding:96px 0;position:relative;overflow:hidden;
+}
+.cta-section::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+.cta-inner{position:relative;max-width:700px;margin:0 auto;text-align:center;padding:0 56px;}
+.cta-eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:20px;}
+.cta-title{font-family:'Playfair Display',serif;font-size:clamp(38px,5vw,64px);font-weight:900;letter-spacing:-2px;color:#fff;line-height:1.05;margin-bottom:16px;}
+.cta-sub{font-size:16px;color:rgba(255,255,255,0.6);font-weight:300;margin-bottom:44px;}
+.cta-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.cta-btn-w{background:#fff;color:var(--green);padding:14px 30px;border-radius:6px;font-size:15px;font-weight:600;text-decoration:none;transition:all 0.2s;}
+.cta-btn-w:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.15);}
+.cta-btn-o{background:transparent;color:rgba(255,255,255,0.8);padding:14px 30px;border-radius:6px;font-size:15px;font-weight:400;text-decoration:none;transition:all 0.2s;border:1.5px solid rgba(255,255,255,0.25);}
+.cta-btn-o:hover{border-color:rgba(255,255,255,0.6);color:#fff;transform:translateY(-2px);}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--ink2);padding:28px 56px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+}
+.foot-logo{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--cream);letter-spacing:-0.3px;}
+.foot-copy{font-size:12px;color:rgba(245,240,232,0.35);}
+.foot-links{display:flex;gap:20px;}
+.foot-links a{font-size:12px;color:rgba(245,240,232,0.35);text-decoration:none;transition:color 0.2s;}
+.foot-links a:hover{color:var(--cream);}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.on{opacity:1;transform:translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1000px){
+  .hero{grid-template-columns:1fr;min-height:auto;}
+  .hero-left{padding:120px 40px 60px;}
+  .hero-right{min-height:280px;height:auto;}
+  nav{padding:16px 32px;}
+  .container{padding:0 32px;}
+  .about-layout,.bio-layout{grid-template-columns:1fr;}
+  .stack-grid{grid-template-columns:1fr 1fr;}
+  .process-steps{grid-template-columns:1fr;gap:1px;}
+  .fp-card{grid-template-columns:1fr;}
+  .proj-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-mark">D</div>
+    <span class="nav-logo-text">DevCrew</span>
+  </a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#stack">Stack</a>
+    <a href="#process">Process</a>
+    <a href="#projects">Projects</a>
+    <a href="#team-lead">Team Lead</a>
+    <a href="#contact" class="nav-cta">Contact Us</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Freelance Tech Team &mdash; Available Now</div>
+    <h1>We Ship <em>Digital</em><br>Products.</h1>
+    <p class="hero-desc">A cross-functional freelance team delivering mobile apps, web platforms, and user experiences &mdash; from idea to App Store in agile sprints.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-fill">See Our Work</a>
+      <a href="#contact" class="btn-outline">Start a Project &rarr;</a>
+    </div>
+    <div class="hero-scroll-hint">Scroll to explore</div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-grid"></div>
+    <div class="hero-right-content">
+      <div class="hero-stat-row">
+        <div>
+          <div class="hero-stat-num">10+</div>
+          <div class="hero-stat-label">Apps shipped</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">5K+</div>
+          <div class="hero-stat-label">Active users</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">4+</div>
+          <div class="hero-stat-label">Yrs experience</div>
+        </div>
+      </div>
+      <div class="hero-bottom-label">Flutter &bull; Node.js &bull; React &bull; Angular &bull; Figma &bull; QA</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item">Flutter Mobile Apps</div>
+    <div class="ticker-item">React &amp; Angular Web</div>
+    <div class="ticker-item">Node.js Backend</div>
+    <div class="ticker-item">UI/UX Design &middot; Figma</div>
+    <div class="ticker-item">Agile Sprints</div>
+    <div class="ticker-item">App Store Publishing</div>
+    <div class="ticker-item">Firebase &amp; Analytics</div>
+    <div class="ticker-item">REST APIs</div>
+    <div class="ticker-item">Clean Architecture</div>
+    <div class="ticker-item">E-Commerce</div>
+    <div class="ticker-item">POS Systems</div>
+    <div class="ticker-item">HR Solutions</div>
+    <div class="ticker-item">Ride-Hailing</div>
+    <div class="ticker-item">Accounting Apps</div>
+    <div class="ticker-item">Document Management</div>
+    <div class="ticker-item">Flutter Mobile Apps</div>
+    <div class="ticker-item">React &amp; Angular Web</div>
+    <div class="ticker-item">Node.js Backend</div>
+    <div class="ticker-item">UI/UX Design &middot; Figma</div>
+    <div class="ticker-item">Agile Sprints</div>
+    <div class="ticker-item">App Store Publishing</div>
+    <div class="ticker-item">Firebase &amp; Analytics</div>
+    <div class="ticker-item">REST APIs</div>
+    <div class="ticker-item">Clean Architecture</div>
+    <div class="ticker-item">E-Commerce</div>
+    <div class="ticker-item">POS Systems</div>
+    <div class="ticker-item">HR Solutions</div>
+    <div class="ticker-item">Ride-Hailing</div>
+    <div class="ticker-item">Accounting Apps</div>
+    <div class="ticker-item">Document Management</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="about-section">
+  <div class="container">
+    <div class="section-eyebrow reveal">Who We Are</div>
+    <div class="about-layout">
+      <div class="reveal">
+        <h2 class="section-title">A lean team.<br>Big output.</h2>
+        <p>A tight-knit freelance crew with deep experience building and shipping B2C &amp; B2B applications across mobile, web, and backend. We work in agile sprints so you see progress every week &mdash; no surprises.</p>
+        <p>From initial wireframes to App Store submission, we own the full lifecycle and communicate clearly at every step.</p>
+        <div class="about-stats">
+          <div class="stat-box"><div class="stat-n">10+</div><div class="stat-l">Apps Shipped</div></div>
+          <div class="stat-box"><div class="stat-n">4+</div><div class="stat-l">Years Experience</div></div>
+          <div class="stat-box"><div class="stat-n">5K+</div><div class="stat-l">App Users</div></div>
+          <div class="stat-box"><div class="stat-n">3+</div><div class="stat-l">Industries Served</div></div>
+        </div>
+      </div>
+      <div class="team-cards reveal">
+        <div class="team-card">
+          <div class="tc-icon">🧭</div>
+          <div><div class="tc-role">Project Manager</div><div class="tc-desc">Agile sprint planning, stakeholder comms, delivery</div></div>
+        </div>
+        <div class="team-card">
+          <div class="tc-icon">📱</div>
+          <div><div class="tc-role">Mobile Developer</div><div class="tc-desc">Flutter &amp; Dart, clean architecture, iOS &amp; Android</div></div>
+        </div>
+        <div class="team-card">
+          <div class="tc-icon">🌐</div>
+          <div><div class="tc-role">Frontend Developer</div><div class="tc-desc">React, Angular, Flutter Web — pixel-perfect UIs</div></div>
+        </div>
+        <div class="team-card">
+          <div class="tc-icon">🎨</div>
+          <div><div class="tc-role">UI/UX Designer</div><div class="tc-desc">Figma, user flows, prototypes, visual identity</div></div>
+        </div>
+        <div class="team-card">
+          <div class="tc-icon">🧪</div>
+          <div><div class="tc-role">QA Tester</div><div class="tc-desc">Manual &amp; automated testing, regression, UAT</div></div>
+        </div>
+        <div class="team-card" style="border-color:rgba(29,92,58,0.25);background:rgba(29,92,58,0.04);">
+          <div class="tc-icon" style="background:rgba(29,92,58,0.1);">⚙️</div>
+          <div><div class="tc-role">Backend (Node.js)</div><div class="tc-desc">REST APIs, databases &amp; third-party integrations</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK -->
+<section id="stack" class="stack-section">
+  <div class="container">
+    <div class="section-eyebrow reveal">Our Stack</div>
+    <h2 class="section-title reveal">The tools we ship with.</h2>
+    <div class="stack-grid reveal">
+      <div class="stack-card">
+        <div class="stack-icon-big">📱</div>
+        <div class="stack-name">Mobile</div>
+        <p class="stack-desc">Primary platform for all mobile apps &mdash; iOS &amp; Android from one codebase with clean architecture.</p>
+        <div class="tag-row"><span class="tag">Flutter</span><span class="tag">Dart</span><span class="tag">Bloc</span><span class="tag">Riverpod</span><span class="tag">GetX</span><span class="tag">Shorebird OTA</span></div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon-big">🌐</div>
+        <div class="stack-name">Frontend Web</div>
+        <p class="stack-desc">React or Angular for complex web apps; Flutter Web when the UI mirrors the mobile app.</p>
+        <div class="tag-row"><span class="tag">React</span><span class="tag">Angular</span><span class="tag">Flutter Web</span><span class="tag">TypeScript</span></div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon-big">⚙️</div>
+        <div class="stack-name">Backend</div>
+        <p class="stack-desc">Scalable REST APIs and real-time integrations powering all our applications.</p>
+        <div class="tag-row"><span class="tag">Node.js</span><span class="tag">REST APIs</span><span class="tag">Firebase</span><span class="tag">Odoo ERP</span></div>
+      </div>
+      <div class="stack-card">
+        <div class="stack-icon-big">🎨</div>
+        <div class="stack-name">Design &amp; QA</div>
+        <p class="stack-desc">End-to-end design-to-code workflow with rigorous quality assurance built in every sprint.</p>
+        <div class="tag-row"><span class="tag">Figma</span><span class="tag">Maestro</span><span class="tag">Jira</span><span class="tag">CI/CD</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process" class="process-section">
+  <div class="container">
+    <div class="section-eyebrow reveal">How We Work</div>
+    <h2 class="section-title reveal">From brief to App Store<br>in sprints.</h2>
+    <p class="section-sub reveal">Agile methodology with weekly deliverables &mdash; you&rsquo;re never left in the dark.</p>
+    <div class="process-steps reveal">
+      <div class="process-step">
+        <div class="ps-num">01</div>
+        <div class="ps-title">Discovery</div>
+        <div class="ps-desc">Requirements gathering, user research, scope definition &amp; project planning</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">02</div>
+        <div class="ps-title">Design</div>
+        <div class="ps-desc">Wireframes, Figma prototypes, user flows &amp; visual identity</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">03</div>
+        <div class="ps-title">Sprint Dev</div>
+        <div class="ps-desc">2-week agile sprints, daily standups &amp; continuous integration</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">04</div>
+        <div class="ps-title">QA &amp; UAT</div>
+        <div class="ps-desc">Testing, bug fixing, stakeholder review &amp; acceptance</div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">05</div>
+        <div class="ps-title">Launch</div>
+        <div class="ps-desc">App Store &amp; Play Store deployment, monitoring &amp; ongoing support</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="projects-section">
+  <div class="container">
+    <div class="section-eyebrow reveal">Our Work</div>
+    <h2 class="section-title reveal">Products we&rsquo;ve shipped<br>together.</h2>
+
+    <!-- FEATURED: GreenShare365 -->
+    <div class="featured-wrap reveal">
+      <div class="fp-card">
+        <div class="fp-visual">
+          <div class="fp-visual-grid"></div>
+          <div class="phones-wrap">
+            <div class="ph ph-sm">
+              <div class="ph-bar"><span class="ph-dot"></span>GreenShare365</div>
+              <div class="ph-body">
+                <div class="ph-row g"></div>
+                <div class="ph-row"></div>
+                <div class="ph-mini"><div class="ph-mini-row"></div><div class="ph-mini-row"></div><div class="ph-mini-row"></div></div>
+                <div class="ph-row" style="width:75%"></div>
+                <div class="ph-mini"><div class="ph-mini-row"></div><div class="ph-mini-row"></div></div>
+                <div class="ph-row" style="width:50%"></div>
+                <div class="ph-row g" style="width:80%"></div>
+              </div>
+            </div>
+            <div class="ph ph-lg">
+              <div class="ph-bar"><span class="ph-dot"></span>Dashboard</div>
+              <div class="ph-body">
+                <div class="ph-row g"></div>
+                <div class="ph-mini" style="background:rgba(29,92,58,0.18);border-color:rgba(29,92,58,0.25);">
+                  <div class="ph-mini-row" style="background:rgba(61,160,107,0.35)"></div>
+                  <div class="ph-mini-row" style="background:rgba(61,160,107,0.22)"></div>
+                  <div class="ph-mini-row" style="background:rgba(61,160,107,0.15);width:55%"></div>
+                </div>
+                <div class="ph-row"></div>
+                <div class="ph-mini"><div class="ph-mini-row"></div><div class="ph-mini-row"></div><div class="ph-mini-row"></div></div>
+                <div class="ph-mini"><div class="ph-mini-row"></div><div class="ph-mini-row" style="width:50%"></div></div>
+                <div class="ph-row g" style="width:88%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fp-content">
+          <div class="fp-badge">⭐ Featured Team Project — Built from Scratch</div>
+          <div class="fp-title">GreenShare365</div>
+          <div class="fp-prev">Formerly GreenDocs365 &middot; Accounting &amp; Finance App</div>
+          <p class="fp-desc">A full-stack accounting application our entire team built from scratch — mobile, web, and backend. Features real-time financial tracking, invoicing, and business analytics designed for modern SMBs.</p>
+          <div class="fp-feats">
+            <div class="fp-feat">Real-time accounting &amp; financial dashboards</div>
+            <div class="fp-feat">Cross-platform: iOS, Android &amp; Flutter Web</div>
+            <div class="fp-feat">Node.js backend with REST API integration</div>
+            <div class="fp-feat">UI/UX designed in Figma, published to Behance</div>
+          </div>
+          <div class="fp-links">
+            <a href="https://apps.apple.com/eg/app/greenshare365/id6757367997" target="_blank" class="pill main">🍎 App Store</a>
+            <a href="https://play.google.com/store/apps/details?id=com.greenAccounting.docs" target="_blank" class="pill">▶ Google Play</a>
+            <a href="https://greendocs365-notificatio-79dbb.web.app/" target="_blank" class="pill">🌐 Web App</a>
+            <a href="https://www.behance.net/gallery/243726947/GreenDocs365-%28Accounting-App%29" target="_blank" class="pill">🎨 UI/UX Design</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT GRID -->
+    <div class="proj-grid">
+
+      <!-- Exception Patissier — partial contribution -->
+      <div class="proj-card reveal">
+        <div class="proj-icon">🍰</div>
+        <div class="proj-title">Exception Patissier</div>
+        <div class="proj-cat">E-Commerce &middot; Mobile App</div>
+        <div class="proj-note">Contributed — Feature Updates &amp; Improvements</div>
+        <p class="proj-desc">Contributed feature updates and performance improvements to this bakery e-commerce app serving 5,000+ users. Worked on payment gateway refinements, UI enhancements, and Shorebird OTA update integration.</p>
+        <div class="proj-tags"><span class="tag">Flutter</span><span class="tag">Shorebird OTA</span><span class="tag">Payment Gateway</span><span class="tag">Firebase</span></div>
+        <div class="proj-links">
+          <a href="https://apps.apple.com/app/exception-patissier/id6447405030" target="_blank" class="mini-pill">App Store</a>
+          <a href="https://play.google.com/store/apps/details?id=com.exception.patissier" target="_blank" class="mini-pill">Google Play</a>
+        </div>
+      </div>
+
+      <!-- Sichta — Document Exchange App -->
+      <div class="proj-card reveal">
+        <div class="proj-icon">📄</div>
+        <div class="proj-title">Sichta</div>
+        <div class="proj-cat">FinTech &middot; Document Management App</div>
+        <p class="proj-desc">A secure mobile platform replacing email for document exchange between clients and an accounting firm. Clients scan &amp; upload invoices, cheques, bank statements, and legal documents. Features client onboarding with KYC, digital agreement signing, auto-deletion lifecycle management, Odoo ERP integration, and an admin dashboard with expiry alerts and push notifications.</p>
+        <div class="proj-tags"><span class="tag">Flutter</span><span class="tag">Node.js</span><span class="tag">Odoo ERP</span><span class="tag">2FA Security</span><span class="tag">E2E Encryption</span><span class="tag">Push Notifications</span></div>
+        <div class="proj-links">
+          <span class="mini-pill" style="cursor:default;background:rgba(29,92,58,0.06);color:var(--green-mid);border-color:rgba(29,92,58,0.2);">In Development</span>
+        </div>
+      </div>
+
+      <!-- UR-Turn -->
+      <div class="proj-card reveal">
+        <div class="proj-icon">🚗</div>
+        <div class="proj-title">UR-Turn (Hwilo)</div>
+        <div class="proj-cat">Ride-Hailing &middot; Mobile App</div>
+        <p class="proj-desc">Uber-style ride-hailing with separate Customer and Driver apps. Real-time maps, Firebase integration, and 500+ active users at peak.</p>
+        <div class="proj-tags"><span class="tag">Flutter</span><span class="tag">Google Maps</span><span class="tag">Firebase</span><span class="tag">Real-Time</span></div>
+        <div class="proj-links">
+          <a href="https://apps.apple.com/app/ur-turn-ride-captains/id1639003617" target="_blank" class="mini-pill">Rider App Store</a>
+          <a href="https://play.google.com/store/apps/details?id=com.hwilo.urturn" target="_blank" class="mini-pill">Driver Play</a>
+        </div>
+      </div>
+
+      <!-- Pearogram HR -->
+      <div class="proj-card reveal">
+        <div class="proj-icon">👥</div>
+        <div class="proj-title">Pearogram HR Suite</div>
+        <div class="proj-cat">B2B &amp; B2C &middot; HR Management</div>
+        <p class="proj-desc">Suite of HR apps (Pear HR + LVLUP 365) covering employee management, attendance, payroll, and performance &mdash; Flutter + Odoo backend.</p>
+        <div class="proj-tags"><span class="tag">Flutter</span><span class="tag">Odoo</span><span class="tag">Clean Arch</span><span class="tag">HR</span></div>
+        <div class="proj-links">
+          <a href="https://apps.apple.com/app/pear-hr/id1630305073" target="_blank" class="mini-pill">App Store</a>
+          <a href="https://play.google.com/store/apps/details?id=com.pearogram.pearhr" target="_blank" class="mini-pill">Google Play</a>
+        </div>
+      </div>
+
+      <!-- Value+ POS -->
+      <div class="proj-card reveal">
+        <div class="proj-icon">🛒</div>
+        <div class="proj-title">Value+ POS</div>
+        <div class="proj-cat">Retail &middot; Point of Sale System</div>
+        <p class="proj-desc">A comprehensive retail POS system with real-time inventory management, sales tracking, and customer management for modern retail businesses.</p>
+        <div class="proj-tags"><span class="tag">Flutter</span><span class="tag">Inventory</span><span class="tag">POS</span><span class="tag">Real-Time</span></div>
+        <div class="proj-links"><span class="mini-pill" style="cursor:default;">Enterprise Client</span></div>
+      </div>
+
+      <!-- Pear Kids -->
+      <div class="proj-card reveal">
+        <div class="proj-icon">🌿</div>
+        <div class="proj-title">Pear Kids</div>
+        <div class="proj-cat">Education &middot; Nursery App</div>
+        <p class="proj-desc">An education app for parents to track children's daily activities, attendance, and milestones in nurseries &mdash; built with Cubit and a clean repository pattern.</p>
+        <div class="proj-tags"><span class="tag">Flutter</span><span class="tag">Cubit</span><span class="tag">Dio</span><span class="tag">Education</span></div>
+        <div class="proj-links">
+          <a href="https://apps.apple.com/app/pear-kids/id1674506082" target="_blank" class="mini-pill">App Store</a>
+          <a href="https://play.google.com/store/apps/details?id=com.pearogram.pearKids" target="_blank" class="mini-pill">Google Play</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TEAM LEAD / BIO -->
+<section id="team-lead" class="bio-section">
+  <div class="container">
+    <div class="section-eyebrow reveal">Team Lead</div>
+    <h2 class="section-title reveal">Meet the PM behind<br>the products.</h2>
+    <div class="bio-layout">
+      <div class="reveal">
+        <div class="bio-card">
+          <div class="bio-card-top">
+            <div class="bio-initials">SM</div>
+            <div class="bio-name">Shimaa Magdy</div>
+            <div class="bio-title-badge">Project Manager &amp; Mobile Developer</div>
+          </div>
+          <div class="bio-card-body">
+            <div class="bio-row"><span class="bio-key">Location</span><span class="bio-val">Buraydah, Saudi Arabia</span></div>
+            <div class="bio-row"><span class="bio-key">Experience</span><span class="bio-val">4+ Years</span></div>
+            <div class="bio-row"><span class="bio-key">Education</span><span class="bio-val">BSc Computer Science</span></div>
+            <div class="bio-row"><span class="bio-key">Availability</span><span class="bio-val avail">● Open to Projects</span></div>
+          </div>
+          <div class="bio-card-body" style="padding-top:0;">
+            <div class="bio-contact-row">
+              <a href="mailto:shimaam526@gmail.com" class="contact-btn">✉ shimaam526@gmail.com</a>
+              <a href="tel:+966571596036" class="contact-btn">📞 +966 57 159 6036</a>
+              <a href="https://wa.me/201011920410" target="_blank" class="contact-btn wa">💬 WhatsApp (+20 101 192 0410)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bio-right reveal">
+        <h3>Results-driven PM with hands-on mobile dev background.</h3>
+        <p>Shimaa bridges the gap between business needs and technical delivery. With 4+ years in Flutter development and product lifecycle management, she leads teams through agile sprints while staying close to the code &mdash; ensuring quality, on-time delivery, and user-first thinking at every step.</p>
+        <div class="skills-list">
+          <div class="skill-item"><div class="skill-top"><span>Product Management &amp; Agile</span><span style="color:var(--muted)">96%</span></div><div class="skill-track"><div class="skill-fill" data-w="0.96"></div></div></div>
+          <div class="skill-item"><div class="skill-top"><span>Flutter / Dart Development</span><span style="color:var(--muted)">95%</span></div><div class="skill-track"><div class="skill-fill" data-w="0.95"></div></div></div>
+          <div class="skill-item"><div class="skill-top"><span>App Store Publishing &amp; Release</span><span style="color:var(--muted)">90%</span></div><div class="skill-track"><div class="skill-fill" data-w="0.90"></div></div></div>
+          <div class="skill-item"><div class="skill-top"><span>Analytics (Firebase, Mixpanel)</span><span style="color:var(--muted)">85%</span></div><div class="skill-track"><div class="skill-fill" data-w="0.85"></div></div></div>
+          <div class="skill-item"><div class="skill-top"><span>Cross-functional Collaboration</span><span style="color:var(--muted)">92%</span></div><div class="skill-track"><div class="skill-fill" data-w="0.92"></div></div></div>
+        </div>
+        <div class="tools-cloud">
+          <span class="tag">Jira</span><span class="tag">Trello</span><span class="tag">ClickUp</span><span class="tag">Notion</span><span class="tag">Azure</span><span class="tag">Firebase</span><span class="tag">Google Analytics</span><span class="tag">Mixpanel</span><span class="tag">REST APIs</span><span class="tag">UAT</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / CONTACT -->
+<section id="contact" class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-eyebrow">Ready to build something great?</div>
+    <h2 class="cta-title">Let&rsquo;s ship your<br>next product.</h2>
+    <p class="cta-sub">Drop us a message &mdash; we&rsquo;ll get back to you within 24 hours.</p>
+    <div class="cta-links">
+      <a href="mailto:shimaam526@gmail.com" class="cta-btn-w">✉ Email Us</a>
+      <a href="tel:+966571596036" class="cta-btn-o">📞 +966 57 159 6036</a>
+      <a href="https://wa.me/201011920410" target="_blank" class="cta-btn-o">💬 WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">DevCrew</div>
+  <div class="foot-copy">&copy; 2025 Shimaa Magdy&rsquo;s Freelance Team. All rights reserved.</div>
+  <div class="foot-links">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+// Nav scroll class
+window.addEventListener('scroll',()=>{
+  document.getElementById('main-nav').classList.toggle('scrolled',window.scrollY>40);
+});
+
+// Reveal on scroll
+const reveals=document.querySelectorAll('.reveal');
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>{
+        e.target.classList.add('on');
+        e.target.querySelectorAll('.skill-fill').forEach(f=>{
+          f.style.transform='scaleX('+f.dataset.w+')';
+        });
+      },i*70);
+    }
+  });
+},{threshold:0.08,rootMargin:'0px 0px -50px 0px'});
+reveals.forEach(el=>io.observe(el));
+
+// Active nav link
+const secs=document.querySelectorAll('section[id]');
+const navAs=document.querySelectorAll('.nav-links a:not(.nav-cta)');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-130)cur=s.id;});
+  navAs.forEach(a=>{
+    const isActive=a.getAttribute('href')==='#'+cur;
+    a.style.color=isActive?'var(--ink)':'var(--muted)';
+    a.style.fontWeight=isActive?'500':'400';
+  });
+});
+</script>
+</body>
+</html>
